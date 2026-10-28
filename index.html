@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>광화문 오늘 뭐 먹지</title>
+<meta name="description" content="광화문·시청·종각·서촌 직장인 점심과 회식 장소를 메뉴별·도보순으로 고르고 동료 후기를 함께 쌓는 앱">
+<meta name="theme-color" content="#1E6B5A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="뭐 먹지">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="seal" aria-hidden="true">광화<br>문</div>
+      <div>
+        <h1>오늘 뭐 먹지?</h1>
+        <p>광화문·시청·종각·서촌 점심과 회식</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="seg" id="originSeg" role="group" aria-label="기점"></div>
+      <div class="seg" id="modeSeg" role="group" aria-label="점심 저녁">
+        <button id="mLunch" data-mode="lunch" aria-pressed="true">점심</button>
+        <button id="mDinner" data-mode="dinner" aria-pressed="false">저녁·회식</button>
+      </div>
+    </div>
+    <div class="status" id="status">불러오는 중…</div>
+  </header>
+
+  <section class="sec" aria-labelledby="h-rv">
+    <div class="sec-head"><h2 id="h-rv">최근 동료 후기</h2><span class="sub num" id="rvCount"></span></div>
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-tiles">
+    <div class="sec-head"><h2 id="h-tiles">메뉴부터 골라요</h2><button class="linkbtn" id="clearCat" hidden>전체 보기</button></div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-list">
+    <div class="sec-head wrap-head"><h2 id="h-list">가까운 집</h2>
+      <div class="seg small" id="sortSeg" role="group" aria-label="정렬">
+        <button id="sNear" data-sort="near" aria-pressed="true">가까운 순</button>
+        <button id="sTeam" data-sort="team" aria-pressed="false">동료 평점</button>
+        <button id="sGoogle" data-sort="google" aria-pressed="false" hidden>구글 평점</button>
+      </div></div>
+    <span class="sub" id="listSub" style="margin-top:-6px"></span>
+    <div class="list" id="list"></div>
+    <div class="attr" id="gAttr" hidden>G 표시 평점 출처: Google 지도</div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-rank" id="rankSec" hidden>
+    <div class="sec-head"><h2 id="h-rank">동료 평점 순위</h2><span class="sub">후기 2개 이상</span></div>
+    <ol class="rank" id="rank"></ol>
+  </section>
+
+  <details class="add" id="addBox">
+    <summary>목록에 없는 단골집 추가 <span class="sub">(모두에게 보여요)</span></summary>
+    <form class="grid" id="addForm" autocomplete="off">
+      <div class="f full"><label for="aName">식당 이름</label><input type="text" id="aName" maxlength="30" required placeholder="예: 광화문 ○○식당"></div>
+      <div class="f"><label for="aCat">메뉴 분류</label><select id="aCat"></select></div>
+      <div class="f"><label for="aArea">위치</label><input type="text" id="aArea" maxlength="30" placeholder="예: 디타워 지하 1층"></div>
+      <div class="f"><label for="aWalk">걸어서 몇 분</label><input type="number" id="aWalk" min="1" max="30" value="5"></div>
+      <div class="f"><label for="aPrice">1인 가격대</label><select id="aPrice"><option value="1">1만원 안팎</option><option value="2" selected>1~2만원</option><option value="3">2만원 넘게</option></select></div>
+      <div class="f full"><label for="aMenu">대표 메뉴</label><input type="text" id="aMenu" maxlength="40" placeholder="예: 제육볶음, 된장찌개"></div>
+      <div class="f full"><label for="aPhone">전화번호</label><input type="text" id="aPhone" maxlength="20" inputmode="tel" placeholder="선택"></div>
+      <label class="check f full"><input type="checkbox" id="aGroup"> 룸·단체석이 있어 회식하기 좋아요</label>
+      <div class="f full"><button class="btn" type="submit" id="aSubmit">추가</button><span class="msg" id="aMsg"></span></div>
+    </form>
+  </details>
+
+  <footer>
+    <p><b>이렇게 써요.</b> 위에서 기점과 점심·저녁을 고르고 메뉴 타일을 누르면 가까운 순(저녁은 회식하기 좋은 순)으로 나옵니다. 고르기 어려우면 ‘아무거나’를 누르세요. 다녀온 뒤 별점과 한 줄 평을 남기면 맨 위 후기와 평점 순위에 반영됩니다. 가입 없이 닉네임만 정하면 돼요. 휴대폰에서 ‘홈 화면에 추가’를 누르면 앱처럼 열 수 있어요.</p>
+    <p><b>데이터.</b> 기본 34곳은 2026년 10월 웹에 공개된 맛집 소개·후기를 바탕으로 정리했습니다. 도보 시간은 기점에서의 직선거리×1.3을 분속 70m로 나눈 추정치이고, 좌표는 주소 기준 근사값입니다. 가격대도 추정이니 영업시간·휴무는 지도에서 확인하세요. ‘구글 평점’은 Google 지도의 평점이며, 리뷰 수가 적은 곳은 순위를 매길 때 보정합니다. 없어진 집은 상세 화면에서 ‘없어진 집이에요’를 눌러 주세요.</p>
+    <p id="hiddenLine" hidden></p>
+    <div id="hiddenList" hidden></div>
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shName" hidden><div class="sheet-in" id="sheetIn"></div></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

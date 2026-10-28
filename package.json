@@ -1,0 +1,9 @@
+{
+  "name": "gwanghwamun-lunch",
+  "private": true,
+  "type": "module",
+  "description": "광화문 오늘 뭐 먹지 — 점심·회식 장소 고르기",
+  "engines": {
+    "node": ">=18"
+  }
+}

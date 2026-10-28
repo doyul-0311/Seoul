@@ -1,0 +1,50 @@
+rules_version = '2';
+
+// Firebase 콘솔 > Firestore Database > 규칙 탭에 이 내용을 그대로 붙여 넣고 '게시'를 누르세요.
+// 누구나 읽을 수 있고, 쓰기는 앱이 자동으로 하는 익명 로그인 사용자만 가능합니다.
+// 수정은 막고, 자기 후기만 지울 수 있습니다.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /reviews/{id} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['pid', 'stars', 'text', 'nick', 'at', 'uid'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.pid is string && request.resource.data.pid.size() > 0 && request.resource.data.pid.size() <= 60
+        && request.resource.data.stars is int && request.resource.data.stars >= 1 && request.resource.data.stars <= 5
+        && request.resource.data.text is string && request.resource.data.text.size() <= 80
+        && request.resource.data.nick is string && request.resource.data.nick.size() > 0 && request.resource.data.nick.size() <= 12
+        && request.resource.data.at is int;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
+    match /added/{id} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['name', 'cat', 'area', 'walk', 'price', 'menu', 'phone', 'group', 'at', 'uid'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 30
+        && request.resource.data.cat is string && request.resource.data.cat.size() <= 20
+        && request.resource.data.area is string && request.resource.data.area.size() <= 30
+        && request.resource.data.walk is int && request.resource.data.walk >= 1 && request.resource.data.walk <= 30
+        && request.resource.data.price is int && request.resource.data.price >= 1 && request.resource.data.price <= 3
+        && request.resource.data.menu is string && request.resource.data.menu.size() <= 40
+        && request.resource.data.phone is string && request.resource.data.phone.size() <= 20
+        && request.resource.data.group is bool
+        && request.resource.data.at is int;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
+    // '없어진 집' 신고. 문서 id = 식당 id. 누구나 신고·복구할 수 있습니다.
+    match /closed/{id} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['at', 'uid'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.at is int;
+      allow delete: if request.auth != null;
+    }
+  }
+}
