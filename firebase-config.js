@@ -4,14 +4,14 @@
 //
 // 비워 두면(null) 앱은 식당 목록만 보여 주고 후기·추가 기능은 꺼집니다.
 
-export const firebaseConfig = null;
+export const firebaseConfig =  {
+  apiKey: "AIzaSyABwCMsH4y5tQcdcdxr5kBfXAQ2ZI5568k",
+  authDomain: "lunch-gwanghwamun.firebaseapp.com",
+  projectId: "lunch-gwanghwamun",
+  storageBucket: "lunch-gwanghwamun.firebasestorage.app",
+  messagingSenderId: "426675963320",
+  appId: "1:426675963320:web:f58f937f898f9b29f67b4d"
+};
 
-// 예시:
-// export const firebaseConfig = {
-//   apiKey: "AIza...",
-//   authDomain: "gwanghwamun-lunch.firebaseapp.com",
-//   projectId: "gwanghwamun-lunch",
-//   storageBucket: "gwanghwamun-lunch.appspot.com",
-//   messagingSenderId: "1234567890",
-//   appId: "1:1234567890:web:abcdef",
-// };
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
